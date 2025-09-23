@@ -1,0 +1,171 @@
+"use client"
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { LineChart } from "@/components/charts/line-chart"
+import { PieChart } from "@/components/charts/pie-chart"
+import { DollarSign, Users, CreditCard, Activity } from "lucide-react"
+
+type DataPoint = {
+  month: string
+  value: number
+}
+
+type PieData = {
+  name: string
+  value: number
+  color?: string
+}
+
+export default function Home() {
+  // Sample data - in a real app, this would come from an API
+  const revenueData: DataPoint[] = [
+    { month: 'Jan', value: 4000 },
+    { month: 'Feb', value: 3000 },
+    { month: 'Mar', value: 5000 },
+    { month: 'Apr', value: 2780 },
+    { month: 'May', value: 1890 },
+    { month: 'Jun', value: 2390 },
+  ]
+
+  const userData: PieData[] = [
+    { name: '18-24', value: 400 },
+    { name: '25-34', value: 300 },
+    { name: '35-44', value: 300 },
+    { name: '45-54', value: 200 },
+    { name: '55+', value: 100 },
+  ]
+
+  const stats = [
+    {
+      title: 'Total Revenue',
+      value: '$45,231.89',
+      description: '+20.1% from last month',
+      icon: DollarSign,
+      trend: 'up',
+    },
+    {
+      title: 'Subscriptions',
+      value: '+2350',
+      description: '+180.1% from last month',
+      icon: Users,
+      trend: 'up',
+    },
+    {
+      title: 'Sales',
+      value: '+12,234',
+      description: '+19% from last month',
+      icon: CreditCard,
+      trend: 'up',
+    },
+    {
+      title: 'Active Now',
+      value: '+573',
+      description: '+201 since last hour',
+      icon: Activity,
+      trend: 'down',
+    },
+  ]
+
+  return (
+    <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <div className="flex items-center space-x-2">
+          {/* Add any action buttons here */}
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat, i) => (
+          <Card key={i}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {stat.title}
+              </CardTitle>
+              <stat.icon className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+              <p className="text-xs text-muted-foreground">
+                {stat.description}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <LineChart data={revenueData} height={300} />
+          </CardContent>
+        </Card>
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>User Demographics</CardTitle>
+          </CardHeader>
+          <CardContent className="flex justify-center">
+            <PieChart data={userData} width={300} height={300} />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Sales</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium leading-none">
+                      Customer {i}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      customer{i}@example.com
+                    </p>
+                  </div>
+                  <div className="font-medium">
+                    ${(Math.random() * 1000).toFixed(2)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex items-center space-x-4">
+                  <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                    <span className="text-sm font-medium">
+                      {`U${i}`}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium leading-none">
+                      User {i} completed a task
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {i} hour{i !== 1 ? 's' : ''} ago
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
